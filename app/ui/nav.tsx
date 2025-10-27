@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 function NavItem({ currentRoute, linkHref }: { currentRoute: string, linkHref: string}) {
-  return <Link href={linkHref} className={`nav-item ${currentRoute === linkHref && "active"}`}>Fishes</Link>;
+  return <Link href={linkHref} className={clsx('nav-item', currentRoute === linkHref && 'active')}>Fishes</Link>;
 }
 
 export default function Nav() {

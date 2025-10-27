@@ -33,6 +33,10 @@ body {
   h2 {
     font-size: var(--text-xl);
   }
+
+  .main {
+    height: calc(100vh - (var(--spacing) * 28));
+  }
 }
 
 @layer components {

@@ -31,7 +31,7 @@ export default function RootLayout({
         <Nav />
 
         <div className="flex min-h-screen items-cemter justify-center bg-zinc-50 dark:bg-gray-800">
-          <main className="flex min-h-screen w-full max-w-5xl flex-col items-start justify-start py-32 sm:items-start">
+          <main className="flex min-h-screen w-full max-w-5xl flex-col items-start justify-start py-32">
             {children}
           </main>
         </div>

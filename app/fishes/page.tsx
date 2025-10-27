@@ -1,47 +1,47 @@
+'use client';
+
+import { fishData } from "@/constants/fishData";
+import { FishDataType } from "@/constants/types";
+import clsx from "clsx";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 const wikiUrl = 'https://echoesoftheplumgrove.wiki.gg';
 
-const fishData = [
-  { link: '/wiki/Anglerfish', imgLink: '/images/thumb/Anglerfish.png/50px-Anglerfish.png?4db50c', name: 'Anglerfish' },
-  { link: '/wiki/Barbel', imgLink: '/images/thumb/Barbel.png/50px-Barbel.png?d7ff01', name: 'Barbel'} ,
-  { link: '/wiki/Blue_Lobster', imgLink: '/images/thumb/Blue_Lobster.png/50px-Blue_Lobster.png?87c088', name: 'Blue Lobster' },
-  { link: '/wiki/Bream', imgLink: '/images/thumb/Bream.png/50px-Bream.png?dbd0ad', name: 'Bream' },
-  { link: '/wiki/Catfish', imgLink: '/images/thumb/Catfish.png/50px-Catfish.png?671048', name: 'Catfish' },
-  { link: '/wiki/Cavefish', imgLink: '/images/thumb/Cavefish.png/50px-Cavefish.png?c539ca', name: 'Cavefish' },
-  { link: '/wiki/Clam', imgLink: '/images/thumb/Clam.png/50px-Clam.png?1c6dd6', name: 'Clam' },
-  { link: '/wiki/Cod', imgLink: '/images/thumb/Cod.png/50px-Cod.png?9c8ae3', name: 'Cod' },
-  { link: '/wiki/Crab', imgLink: '/images/thumb/Crab.png/50px-Crab.png?ec9b4e', name: 'Crab' },
-  { link: '/wiki/Crayfish', imgLink: '/images/thumb/Crayfish.png/50px-Crayfish.png?8ab381', name: 'Crayfish' },
-  { link: '/wiki/Eel', imgLink: '/images/thumb/Eel.png/50px-Eel.png?171822', name: 'Eel' },
-  { link: '/wiki/Ghost_Fish', imgLink: '/images/thumb/Ghost_Fish.png/50px-Ghost_Fish.png?b00694', name: 'Ghost Fish' },
-  { link: '/wiki/Grayling', imgLink: '/images/thumb/Grayling.png/50px-Grayling.png?b9d65a', name: 'Grayling' },
-  { link: '/wiki/Green_Frog', imgLink: '/images/thumb/Green_Frog.png/50px-Green_Frog.png?bf9757', name: 'Green Frog' },
-  { link: '/wiki/Loach', imgLink: '/images/thumb/Loach.png/50px-Loach.png?ff2e6f', name: 'Loach' },
-  { link: '/wiki/Lobster', imgLink: '/images/thumb/Lobster.png/50px-Lobster.png?b6c0e6', name: 'Lobster' },
-  { link: '/wiki/Mackerel', imgLink: '/images/thumb/Mackerel.png/50px-Mackerel.png?591236', name: 'Mackerel' },
-  { link: '/wiki/Moon_Snail', imgLink: '/images/thumb/Moon_Snail.png/50px-Moon_Snail.png?3db251', name: 'Moon Snail' },
-  { link: '/wiki/Moonfish', imgLink: '/images/thumb/Moonfish.png/50px-Moonfish.png?61ff86', name: 'Moonfish' },
-  { link: '/wiki/Murex_Snail', imgLink: '/images/thumb/Murex_Snail.png/50px-Murex_Snail.png?bbc171', name: 'Murex Snail' },
-  { link: '/wiki/Mussel', imgLink: '/images/thumb/Mussel.png/50px-Mussel.png?4bbcd6', name: 'Mussel' },
-  { link: '/wiki/Oyster', imgLink: '/images/thumb/Oyster.png/50px-Oyster.png?d4d7b2', name: 'Oyster' },
-  { link: '/wiki/Perch', imgLink: '/images/thumb/Perch.png/50px-Perch.png?6b3231', name: 'Perch' },
-  { link: '/wiki/Pike', imgLink: '/images/thumb/Pike.png/50px-Pike.png?3e0418', name: 'Pike' },
-  { link: '/wiki/Rainbow_Star', imgLink: '/images/thumb/Rainbow_Star.png/50px-Rainbow_Star.png?2273cb', name: 'Rainbow Star' },
-  { link: '/wiki/Roach', imgLink: '/images/thumb/Roach.png/50px-Roach.png?bc2f0a', name: 'Roach' },
-  { link: '/wiki/Salmon', imgLink: '/images/thumb/Salmon.png/50px-Salmon.png?d24d55', name: 'Salmon' },
-  { link: '/wiki/Scallop', imgLink: '/images/thumb/Scallop.png/50px-Scallop.png?d5447b', name: 'Scallop' },
-  { link: '/wiki/Sea_Star', imgLink: '/images/thumb/Sea_Star.png/50px-Sea_Star.png?df82cb', name: 'Sea Star' },
-  { link: '/wiki/Shad', imgLink: '/images/thumb/Shad.png/50px-Shad.png?63f3a6', name: 'Shad' },
-  { link: '/wiki/Shrimp', imgLink: '/images/thumb/Shrimp.png/50px-Shrimp.png?f9f3cc', name: 'Shrimp' },
-  { link: '/wiki/Squid', imgLink: '/images/thumb/Squid.png/50px-Squid.png?eb6452', name: 'Squid' },
-  { link: '/wiki/Toad', imgLink: '/images/thumb/Toad.png/50px-Toad.png?1dc789', name: 'Toad' },
-  { link: '/wiki/Trout', imgLink: '/images/thumb/Trout.png/50px-Trout.png?8c70c4', name: 'Trout' },
-  { link: '/wiki/Turtle', imgLink: '/images/thumb/Turtle.png/50px-Turtle.png?8c4216', name: 'Turtle' }
-];
-
 function FishCards() {
-  return fishData.map((fish) => {
+  const [userFishes, setUserFishes] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fishes = JSON.parse(localStorage.getItem('fishes') as string);
+
+    if (fishes) {
+      setUserFishes(fishes);
+    }
+  }, [setUserFishes]);
+
+  const handleSetUserFishes = useCallback((fishName: string, target: HTMLElement) => {
+    if (target.tagName === 'A') {
+      // user has clicked the "More info" link
+      return;
+    }
+
+    let indexOfFish = userFishes.indexOf(fishName) ;
+
+    if (indexOfFish === -1) {
+      userFishes.push(fishName);
+    } else {
+      userFishes.splice(indexOfFish, 1);
+    }
+
+    localStorage.setItem('fishes', JSON.stringify(userFishes));
+
+    setUserFishes([...userFishes]);
+  }, [userFishes, setUserFishes]);
+
+  return fishData.map((fish: FishDataType) => {
+    const hasFish = useMemo(() => userFishes.indexOf(fish.name) !== -1, [userFishes]);
+
     return (
-      <div className="card pt-2" key={fish.link}>
+      <div className={clsx('card', 'pt-2', 'cursor-pointer', hasFish && 'selected')} key={fish.link} role="button" onClick={(evt) => handleSetUserFishes(fish.name, evt.target as HTMLElement)}>
         <img src={`${wikiUrl}${fish.imgLink}`} alt={`${fish.name} thumbnail`} />
 
         <div className="card-content text-center">
@@ -57,6 +57,7 @@ export default function Page() {
   return (
     <>
       <h1>Fishes</h1>
+      <p className="mb-2">Click to add or remove a fish</p>
 
       <div className="grid grid-cols-5 gap-2">
         <FishCards />

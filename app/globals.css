@@ -53,4 +53,22 @@ body {
       margin: auto;
     }
   }
+
+  header {
+    @apply flex gap-4 justify-start items-center;
+    background-color: var(--color-black);
+    color: var(--color-white);
+
+    .nav-home {
+      font-size: var(--text-2xl);
+    }
+
+    .nav-item {
+      @apply px-4 flex items-center self-stretch;
+
+      &.active {
+        background-color: var(--color-slate-700);
+      }
+    }
+  }
 }
